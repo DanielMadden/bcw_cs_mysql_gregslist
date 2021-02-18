@@ -3,59 +3,45 @@ using gregslist.db;
 using gregslist.Models;
 using System.Text.Json;
 using System;
+using gregslist.Repositories;
 
 namespace gregslist.Services
 {
   public class CarsService
   {
+    private readonly CarRepository _repository;
+
+    public CarsService(CarRepository repository)
+    {
+      _repository = repository;
+    }
+
     public IEnumerable<Car> Get()
     {
-      return FakeDB.Cars;
+      return _repository.GetAll();
     }
 
     public Car GetById(string carId)
     {
-      Car found = FakeDB.Cars.Find(car => car.Id == carId);
-      if (found == null)
-      {
-        throw new Exception("Invalid Id");
-      }
-      return found;
+      return _repository.GetById(carId);
     }
 
     public Car Create(Car newCar)
     {
-      FakeDB.Cars.Add(newCar);
-      return newCar;
+      return _repository.Create(newCar);
     }
 
-    public Dictionary<string, Car> Edit(string carId, JsonElement carEdits)
+    public Car Edit(string carId, JsonElement carEdits)
     {
-      int index = FakeDB.Cars.FindIndex(car => car.Id == carId);
-      if (index == -1)
-      {
-        throw new Exception("Invalid Id");
-      }
-      Car foundCar = FakeDB.Cars[index];
-      Car oldCar = new Car(foundCar);
-      foundCar.Edit(carEdits);
-      return new Dictionary<string, Car>(){
-          {"Old:", oldCar},
-          {"New:", foundCar}
-      };
+      Car toEdit = _repository.GetById(carId);
+      toEdit.Edit(carEdits);
+      return _repository.Edit(toEdit);
     }
 
-    public Dictionary<string, Car> Delete(string carId)
+    public string Delete(string carId)
     {
-      Car foundCar = FakeDB.Cars.Find(car => car.Id == carId);
-      if (foundCar == null)
-      {
-        throw new Exception("Invalid Id");
-      }
-      FakeDB.Cars.Remove(foundCar);
-      return new Dictionary<string, Car>(){
-          {"Deleted:", foundCar}
-      };
+      int deletedRows = _repository.Delete(carId);
+      return deletedRows + " rows deleted";
     }
   }
 }

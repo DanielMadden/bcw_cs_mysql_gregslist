@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\gregslist\\gregslist.csproj": {}
+    "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\bcw_cs_gregslist\\gregslist.csproj": {}
   },
   "projects": {
-    "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\gregslist\\gregslist.csproj": {
+    "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\bcw_cs_gregslist\\gregslist.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\gregslist\\gregslist.csproj",
+        "projectUniqueName": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\bcw_cs_gregslist\\gregslist.csproj",
         "projectName": "gregslist",
-        "projectPath": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\gregslist\\gregslist.csproj",
+        "projectPath": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\bcw_cs_gregslist\\gregslist.csproj",
         "packagesPath": "C:\\Users\\danie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\gregslist\\obj\\",
+        "outputPath": "C:\\Users\\danie\\Documents\\Programming\\Codeworks\\dotnetTests\\bcw_cs_gregslist\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\danie\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -35,6 +35,16 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "dapper": {
+              "target": "Package",
+              "version": "[2.0.78, )"
+            },
+            "mysqlconnector": {
+              "target": "Package",
+              "version": "[1.2.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

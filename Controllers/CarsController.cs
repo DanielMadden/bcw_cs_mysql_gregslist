@@ -59,7 +59,7 @@ namespace gregslist.Controllers
     }
 
     [HttpPut("{carId}")]
-    public ActionResult<Dictionary<string, Car>> Edit(string carId, [FromBody] JsonElement carEdits)
+    public ActionResult<Car> Edit(string carId, [FromBody] JsonElement carEdits)
     {
       try
       {
@@ -72,7 +72,7 @@ namespace gregslist.Controllers
     }
 
     [HttpDelete("{carId}")]
-    public ActionResult<Dictionary<string, Car>> Delete(string carId)
+    public ActionResult<int> Delete(string carId)
     {
       try
       {

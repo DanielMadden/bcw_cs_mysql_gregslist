@@ -1,3 +1,16 @@
+USE boisecodeworks;
+
+CREATE TABLE cars 
+(
+  id INT AUTO_INCREMENT,
+  make VARCHAR(255) NOT NULL,
+  model VARCHAR(255) NOT NULL,
+  price INT,
+  image VARCHAR(255),
+
+  PRIMARY KEY (id)
+);
+
 -- Create Collection
 -- CREATE TABLE burgers
 -- {
