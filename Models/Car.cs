@@ -30,12 +30,22 @@ namespace gregslist.Models
       Image = image;
     }
 
+    // Clone constructor
+    public Car(Car clone)
+    {
+      Id = clone.Id;
+      Make = clone.Make;
+      Model = clone.Model;
+      Price = clone.Price;
+      Image = clone.Image;
+    }
+
     public void Edit(JsonElement edits)
     {
-      if (edits.TryGetProperty("Make", out JsonElement newMake)) { Make = newMake.ToString(); }
-      if (edits.TryGetProperty("Make", out JsonElement newModel)) { Model = newModel.ToString(); }
-      if (edits.TryGetProperty("Price", out JsonElement newPrice)) { Price = newPrice.GetInt32(); }
-      if (edits.TryGetProperty("Image", out JsonElement newImage)) { Image = newImage.ToString(); }
+      if (edits.TryGetProperty("make", out JsonElement newMake)) { Make = newMake.ToString(); }
+      if (edits.TryGetProperty("model", out JsonElement newModel)) { Model = newModel.ToString(); }
+      if (edits.TryGetProperty("price", out JsonElement newPrice)) { Price = newPrice.GetInt32(); }
+      if (edits.TryGetProperty("image", out JsonElement newImage)) { Image = newImage.ToString(); }
     }
 
   }

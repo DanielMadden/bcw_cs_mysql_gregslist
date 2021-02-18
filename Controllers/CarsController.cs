@@ -4,6 +4,7 @@ using gregslist.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Text.Json;
+using gregslist.Services;
 
 namespace gregslist.Controllers
 {
@@ -11,12 +12,19 @@ namespace gregslist.Controllers
   [Route("api/[controller]")]
   public class CarsController : ControllerBase
   {
+
+    private readonly CarsService _carsService;
+    public CarsController(CarsService carsService)
+    {
+      _carsService = carsService;
+    }
+
     [HttpGet]
     public ActionResult<IEnumerable<Car>> Get()
     {
       try
       {
-        return Ok(FakeDB.Cars);
+        return Ok(_carsService.Get());
       }
       catch (Exception err)
       {
@@ -25,11 +33,11 @@ namespace gregslist.Controllers
     }
 
     [HttpGet("{carId}")]
-    public ActionResult<IEnumerable<Car>> GetById(string carId)
+    public ActionResult<Car> GetById(string carId)
     {
       try
       {
-        return Ok(FakeDB.Cars.Find(car => car.Id == carId));
+        return Ok(_carsService.GetById(carId));
       }
       catch (Exception err)
       {
@@ -38,27 +46,11 @@ namespace gregslist.Controllers
     }
 
     [HttpPost]
-    public ActionResult<IEnumerable<Car>> Create([FromBody] Car newCar)
+    public ActionResult<Car> Create([FromBody] Car newCar)
     {
       try
       {
-        FakeDB.Cars.Add(newCar);
-        return Ok(newCar);
-      }
-      catch (Exception err)
-      {
-        return BadRequest(err.Message);
-      }
-    }
-
-    [HttpDelete("{carId}")]
-    public ActionResult<IEnumerable<Car>> Delete(string carId)
-    {
-      try
-      {
-        Car foundCar = FakeDB.Cars.Find(car => car.Id == carId);
-        FakeDB.Cars.Remove(foundCar);
-        return Ok(foundCar);
+        return Ok(_carsService.Create(newCar));
       }
       catch (Exception err)
       {
@@ -67,13 +59,24 @@ namespace gregslist.Controllers
     }
 
     [HttpPut("{carId}")]
-    public ActionResult<IEnumerable<Dictionary<string, string>>> Edit(string carId, [FromBody] JsonElement carEdits)
+    public ActionResult<Dictionary<string, Car>> Edit(string carId, [FromBody] JsonElement carEdits)
     {
       try
       {
-        int foundIndex = FakeDB.Cars.FindIndex(car => car.Id == carId);
-        FakeDB.Cars[foundIndex].Edit(carEdits);
-        return Ok(FakeDB.Cars[foundIndex]);
+        return Ok(_carsService.Edit(carId, carEdits));
+      }
+      catch (Exception err)
+      {
+        return BadRequest(err.Message);
+      }
+    }
+
+    [HttpDelete("{carId}")]
+    public ActionResult<Dictionary<string, Car>> Delete(string carId)
+    {
+      try
+      {
+        return Ok(_carsService.Delete(carId));
       }
       catch (Exception err)
       {

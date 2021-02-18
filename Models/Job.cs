@@ -38,7 +38,6 @@ namespace gregslist.Models
       Description = clone.Description;
       Image = clone.Image;
     }
-
     // Edit Job
     public void Edit(JsonElement edits)
     {

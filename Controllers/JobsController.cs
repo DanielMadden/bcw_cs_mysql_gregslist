@@ -4,6 +4,7 @@ using gregslist.Models;
 using Microsoft.AspNetCore.Mvc;
 using gregslist.db;
 using System.Text.Json;
+using gregslist.Services;
 
 namespace gregslist.Controllers
 {
@@ -11,12 +12,20 @@ namespace gregslist.Controllers
   [Route("api/[controller]")]
   public class JobsController : ControllerBase
   {
+
+    private JobsService _jobsService;
+
+    public JobsController(JobsService jobsService)
+    {
+      _jobsService = jobsService;
+    }
+
     [HttpGet]
     public ActionResult<IEnumerable<Job>> GetAll()
     {
       try
       {
-        return Ok(FakeDB.Jobs);
+        return Ok(_jobsService.Get());
       }
       catch (Exception err)
       {
@@ -29,7 +38,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        return Ok(FakeDB.Jobs.Find(job => job.Id == jobId));
+        return Ok(_jobsService.GetById(jobId));
       }
       catch (Exception err)
       {
@@ -42,8 +51,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        FakeDB.Jobs.Add(newJob);
-        return Ok(newJob);
+        return Ok(_jobsService.Create(newJob));
       }
       catch (Exception err)
       {
@@ -56,14 +64,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        int index = FakeDB.Jobs.FindIndex(job => job.Id == jobId);
-        Job foundJob = FakeDB.Jobs[index];
-        Job oldJob = new Job(foundJob);
-        foundJob.Edit(jobEdits);
-        return Ok(new Dictionary<string, Job>() {
-          {"Old:", oldJob},
-          {"New:", foundJob}
-        });
+        return Ok(_jobsService.Edit(jobId, jobEdits));
       }
       catch (Exception err)
       {
@@ -76,11 +77,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        Job deletedJob = FakeDB.Jobs.Find(job => job.Id == jobId);
-        FakeDB.Jobs.Remove(deletedJob);
-        return Ok(new Dictionary<string, Job>(){
-          {"Deleted:", deletedJob}
-        });
+        return Ok(_jobsService.Delete(jobId));
       }
       catch (Exception err)
       {

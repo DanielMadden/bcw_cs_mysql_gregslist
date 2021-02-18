@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using gregslist.db;
 using gregslist.Models;
+using gregslist.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace gregslist.Controllers
@@ -11,12 +12,20 @@ namespace gregslist.Controllers
   [Route("api/[controller]")]
   public class HousesController : ControllerBase
   {
+    private HousesService _housesService;
+
+    public HousesController(HousesService housesService)
+    {
+      _housesService = housesService;
+    }
+
+
     [HttpGet]
     public ActionResult<IEnumerable<House>> Get()
     {
       try
       {
-        return Ok(FakeDB.Houses);
+        return Ok(_housesService.Get());
       }
       catch (Exception err)
       {
@@ -29,7 +38,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        return Ok(FakeDB.Houses.Find(house => house.Id == houseId));
+        return Ok(_housesService.GetById(houseId));
       }
       catch (Exception err)
       {
@@ -42,8 +51,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        FakeDB.Houses.Add(newHouse);
-        return Ok(newHouse);
+        return Ok(_housesService.Create(newHouse));
       }
       catch (Exception err)
       {
@@ -56,14 +64,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        int index = FakeDB.Houses.FindIndex(house => house.Id == houseId);
-        House foundHouse = FakeDB.Houses[index];
-        House oldHouse = new House(foundHouse);
-        foundHouse.Edit(edits);
-        return Ok(new Dictionary<string, House>() {
-          {"Old:", oldHouse},
-          {"New:", foundHouse}
-        });
+        return Ok(_housesService.Edit(houseId, edits));
       }
       catch (Exception err)
       {
@@ -76,11 +77,7 @@ namespace gregslist.Controllers
     {
       try
       {
-        House deleteHouse = FakeDB.Houses.Find(house => house.Id == houseId);
-        FakeDB.Houses.Remove(deleteHouse);
-        return Ok(new Dictionary<string, House>() {
-          { "Deleted:", deleteHouse }
-        });
+        return Ok(_housesService.Delete(houseId));
       }
       catch (Exception err)
       {
